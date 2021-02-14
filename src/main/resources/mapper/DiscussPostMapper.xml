@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzk.codewhy.mapper.DiscussPostMapper">
+    <resultMap type="com.zzk.codewhy.model.entity.DiscussPost" id="BaseResultMap">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="content" jdbcType="CLOB" property="content"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="comment_count" jdbcType="INTEGER" property="commentCount"/>
+        <result column="score" jdbcType="DOUBLE" property="score"/>
+    </resultMap>
+
+    <resultMap type="com.zzk.codewhy.model.vo.resp.DiscussPostRespVo" id="VoResultMap">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="content" jdbcType="CLOB" property="content"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="comment_count" jdbcType="INTEGER" property="commentCount"/>
+        <result column="score" jdbcType="DOUBLE" property="score"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="header_url" jdbcType="VARCHAR" property="headerUrl"/>
+    </resultMap>
+
+    <select id="selectVoList" resultMap="VoResultMap">
+        SELECT
+            dp.id,
+            dp.user_id,
+            dp.title,
+            dp.content,
+            dp.type,
+            dp.status,
+            dp.create_time,
+            dp.comment_count,
+            dp.score,
+            u.username,
+            u.header_url
+        FROM
+            discuss_post dp
+        INNER JOIN
+            `user` u
+        ON
+            dp.user_id = u.id
+        ${ew.customSqlSegment}
+    </select>
+</mapper>
