@@ -8,6 +8,8 @@ public class CodewhyApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(CodewhyApplication.class, args);
+
+        System.out.println("http://localhost:8080");
     }
 
 }
