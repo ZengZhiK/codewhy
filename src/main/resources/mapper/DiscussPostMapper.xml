@@ -27,6 +27,7 @@
         <result column="header_url" jdbcType="VARCHAR" property="headerUrl"/>
     </resultMap>
 
+    <!-- 查询所有帖子数据，并封装成Vo对象 -->
     <select id="selectVoList" resultMap="VoResultMap">
         SELECT
             dp.id,

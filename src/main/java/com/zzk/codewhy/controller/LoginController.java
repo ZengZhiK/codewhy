@@ -4,6 +4,8 @@ import com.zzk.codewhy.common.annotation.LogPrint;
 import com.zzk.codewhy.common.annotation.ModelView;
 import com.zzk.codewhy.common.utils.AjaxResponse;
 import com.zzk.codewhy.model.vo.req.RegisterReqVo;
+import com.zzk.codewhy.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,9 @@ import javax.validation.Valid;
  */
 @Controller
 public class LoginController {
+    @Autowired
+    private UserService userService;
+
     @LogPrint(description = "跳转至注册页面")
     @GetMapping("/register")
     @ModelView
@@ -31,7 +36,7 @@ public class LoginController {
     @PostMapping("/register")
     @ResponseBody
     public AjaxResponse doRegister(@RequestBody @Valid RegisterReqVo vo) {
-        System.out.println(vo);
+        userService.register(vo);
         return AjaxResponse.success();
     }
 }

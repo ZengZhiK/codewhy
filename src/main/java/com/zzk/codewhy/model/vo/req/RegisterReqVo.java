@@ -1,7 +1,9 @@
 package com.zzk.codewhy.model.vo.req;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 /**
@@ -21,7 +23,7 @@ public class RegisterReqVo {
     /**
      * 密码
      */
-    @NotBlank(message = "密码不能为空")
+    @Length(min = 5, max = 20, message = "密码长度必须位于5到20之间")
     private String password;
 
     /**
@@ -33,6 +35,6 @@ public class RegisterReqVo {
     /**
      * 邮箱
      */
-    @NotBlank(message = "邮箱不能为空")
+    @Email(message = "请输入正确的邮箱")
     private String email;
 }
