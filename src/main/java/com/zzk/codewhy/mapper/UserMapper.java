@@ -19,4 +19,11 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 用户
      */
     User selectByUsername(String username);
+
+    /**
+     * 根据用户名更新用户激活状态
+     *
+     * @param user
+     */
+    void updateStatusById(User user);
 }

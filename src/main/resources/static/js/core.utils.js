@@ -16,9 +16,10 @@ var CoreUtil = (function () {
       success: function (res) {
         top.layer.close(roleSaveLoading);
         if (res.code === 200) {
-          layer.msg(res.msg);
-          if (typeof ft === "function") {
+          if (ft !== undefined && typeof ft === "function") {
             ft(res);
+          } else {
+            layer.msg(res.msg);
           }
         } else {
           layer.msg(res.msg);

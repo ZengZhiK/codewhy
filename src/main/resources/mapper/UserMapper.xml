@@ -23,5 +23,12 @@
             username = #{username}
     </select>
 
-
+    <update id="updateStatusById">
+        UPDATE 
+            `user`
+        SET
+            status = #{status}
+        WHERE
+            id = #{id}
+    </update>
 </mapper>

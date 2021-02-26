@@ -1,25 +1,24 @@
 package com.zzk.codewhy.service.impl;
 
-import java.time.LocalDateTime;
-import java.util.Random;
-
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zzk.codewhy.common.constant.Constants;
 import com.zzk.codewhy.common.exception.BusinessException;
 import com.zzk.codewhy.common.exception.enums.BusinessExceptionType;
 import com.zzk.codewhy.common.utils.MailClient;
-import com.zzk.codewhy.model.entity.User;
 import com.zzk.codewhy.mapper.UserMapper;
+import com.zzk.codewhy.model.entity.User;
 import com.zzk.codewhy.model.vo.req.RegisterReqVo;
 import com.zzk.codewhy.service.UserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import java.time.LocalDateTime;
+import java.util.Random;
 
 /**
  * <p>
@@ -83,5 +82,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         context.setVariable("url", url);
         String content = templateEngine.process("/mail/activation", context);
         mailClient.sendMail(user.getEmail(), "激活账号", content);
+    }
+
+    @Override
+    public int activation(Integer userId, String code) {
+        User user = userMapper.selectById(userId);
+        if (user.getStatus() == 1) {
+            return Constants.ACTIVATION_REPEAT;
+        } else if (user.getActivationCode().equals(code)) {
+            user.setStatus(1);
+            userMapper.updateStatusById(user);
+            return Constants.ACTIVATION_SUCCESS;
+        }
+        return Constants.ACTIVATION_FAILURE;
+
     }
 }

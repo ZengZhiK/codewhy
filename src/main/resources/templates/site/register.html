@@ -95,7 +95,13 @@
       regParam.confirmPassword = $("#confirm-password").val();
       regParam.email = $("#email").val();
       CoreUtil.sendAjax("/register", JSON.stringify(regParam), function (res) {
-
+        layer.alert("注册成功，我们已经向您的邮箱发送了一封激活邮件，请尽快激活!", {
+          time: 0 //不自动关闭
+          , yes: function (index) {
+            layer.close(index);
+            window.location.href = "/";
+          }
+        });
       }, "POST");
     })
   })

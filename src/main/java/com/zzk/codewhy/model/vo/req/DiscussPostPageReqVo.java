@@ -1,5 +1,6 @@
 package com.zzk.codewhy.model.vo.req;
 
+import com.zzk.codewhy.common.constant.Constants;
 import lombok.Data;
 
 /**
@@ -13,10 +14,10 @@ public class DiscussPostPageReqVo {
     /**
      * 当前页
      */
-    private int pageNum = 1;
+    private int pageNum = Constants.DEFAULT_PAGE_NUM;
 
     /**
      * 每页的数量
      */
-    private int pageSize = 10;
+    private int pageSize = Constants.DEFAULT_PAGE_SIZE;
 }

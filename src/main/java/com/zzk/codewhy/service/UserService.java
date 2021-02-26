@@ -19,4 +19,12 @@ public interface UserService extends IService<User> {
      * @param vo
      */
     void register(RegisterReqVo vo);
+
+    /**
+     *
+     * @param userId
+     * @param code
+     * @return
+     */
+    int activation(Integer userId, String code);
 }
