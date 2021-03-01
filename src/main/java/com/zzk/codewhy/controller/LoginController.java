@@ -1,9 +1,11 @@
 package com.zzk.codewhy.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import com.google.code.kaptcha.Producer;
 import com.zzk.codewhy.common.annotation.LogPrint;
 import com.zzk.codewhy.common.annotation.ModelView;
 import com.zzk.codewhy.common.constant.Constants;
+import com.zzk.codewhy.common.exception.BusinessException;
+import com.zzk.codewhy.common.exception.enums.BusinessExceptionType;
 import com.zzk.codewhy.common.utils.AjaxResponse;
 import com.zzk.codewhy.model.vo.req.RegisterReqVo;
 import com.zzk.codewhy.service.UserService;
@@ -12,7 +14,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * 登录注册 前端控制器
@@ -24,6 +32,9 @@ import javax.validation.Valid;
 public class LoginController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private Producer kaptchaProducer;
 
     @LogPrint(description = "跳转至注册页面")
     @GetMapping("/register")
@@ -65,5 +76,27 @@ public class LoginController {
     @ModelView
     public String getLoginPage() {
         return "/site/login";
+    }
+
+    @LogPrint(description = "刷新验证码图片")
+    @GetMapping("/kaptcha")
+    public void getKaptcha(HttpServletResponse response, HttpSession session) {
+        // 生成验证码
+        String text = kaptchaProducer.createText();
+        BufferedImage image = kaptchaProducer.createImage(text);
+
+        System.out.println("text:" + text);
+
+        // 将验证码存入session
+        session.setAttribute("kaptcha", text);
+
+        // 将突图片输出给浏览器
+        response.setContentType("image/png");
+        try {
+            OutputStream os = response.getOutputStream();
+            ImageIO.write(image, "png", os);
+        } catch (IOException e) {
+            throw new BusinessException(BusinessExceptionType.VERIFICATION_CODE_ERROR);
+        }
     }
 }
