@@ -2,6 +2,8 @@ package com.zzk.codewhy.service;
 
 import com.zzk.codewhy.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.zzk.codewhy.model.session.LoginTicket;
+import com.zzk.codewhy.model.vo.req.LoginReqVo;
 import com.zzk.codewhy.model.vo.req.RegisterReqVo;
 
 /**
@@ -21,10 +23,20 @@ public interface UserService extends IService<User> {
     void register(RegisterReqVo vo);
 
     /**
+     * 用户激活
      *
      * @param userId
      * @param code
      * @return
      */
     int activation(Integer userId, String code);
+
+    /**
+     * 用户登录
+     *
+     * @param vo
+     * @param verifycode
+     * @return
+     */
+    LoginTicket login(LoginReqVo vo, String verifycode);
 }

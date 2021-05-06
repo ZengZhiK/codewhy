@@ -4,9 +4,12 @@ import com.google.code.kaptcha.Producer;
 import com.zzk.codewhy.common.annotation.LogPrint;
 import com.zzk.codewhy.common.annotation.ModelView;
 import com.zzk.codewhy.common.constant.Constants;
+import com.zzk.codewhy.common.constant.SessionConstants;
 import com.zzk.codewhy.common.exception.BusinessException;
 import com.zzk.codewhy.common.exception.enums.BusinessExceptionType;
 import com.zzk.codewhy.common.utils.AjaxResponse;
+import com.zzk.codewhy.model.session.LoginTicket;
+import com.zzk.codewhy.model.vo.req.LoginReqVo;
 import com.zzk.codewhy.model.vo.req.RegisterReqVo;
 import com.zzk.codewhy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,12 +88,10 @@ public class LoginController {
         String text = kaptchaProducer.createText();
         BufferedImage image = kaptchaProducer.createImage(text);
 
-        System.out.println("text:" + text);
-
         // 将验证码存入session
-        session.setAttribute("kaptcha", text);
+        session.setAttribute(SessionConstants.KAPTCHA, text.toLowerCase());
 
-        // 将突图片输出给浏览器
+        // 将图片输出给浏览器
         response.setContentType("image/png");
         try {
             OutputStream os = response.getOutputStream();
@@ -98,5 +99,23 @@ public class LoginController {
         } catch (IOException e) {
             throw new BusinessException(BusinessExceptionType.VERIFICATION_CODE_ERROR);
         }
+    }
+
+    @LogPrint(description = "登录接口")
+    @PostMapping("/login")
+    @ResponseBody
+    public AjaxResponse login(@RequestBody @Valid LoginReqVo loginReqVo, HttpSession session) {
+        String verifycode = (String) session.getAttribute(SessionConstants.KAPTCHA);
+        LoginTicket loginTicket = userService.login(loginReqVo, verifycode);
+        session.setAttribute(SessionConstants.LOGIN_TICKET, loginTicket);
+        return AjaxResponse.success();
+    }
+
+    @LogPrint(description = "登出接口")
+    @GetMapping("/logout")
+    @ModelView
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "/site/login";
     }
 }

@@ -21,6 +21,14 @@ public interface UserMapper extends BaseMapper<User> {
     User selectByUsername(String username);
 
     /**
+     * 根据邮箱查询用户
+     *
+     * @param email 邮箱
+     * @return 用户
+     */
+    User selectByEmail(String email);
+
+    /**
      * 根据用户名更新用户激活状态
      *
      * @param user

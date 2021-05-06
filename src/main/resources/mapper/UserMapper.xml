@@ -23,6 +23,15 @@
             username = #{username}
     </select>
 
+    <select id="selectByEmail" resultMap="BaseResultMap">
+        SELECT
+            id, email
+        FROM
+            `user`
+        WHERE
+            email = #{email}
+    </select>
+
     <update id="updateStatusById">
         UPDATE 
             `user`

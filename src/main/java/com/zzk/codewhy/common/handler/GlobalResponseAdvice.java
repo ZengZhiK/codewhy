@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * @author zzk
  * @create 2020-12-22 9:16
  */
-@ControllerAdvice(basePackages = "com.zzk.shiroadmin")
+@ControllerAdvice
 public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
